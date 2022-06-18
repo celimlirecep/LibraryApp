@@ -1,6 +1,7 @@
 ﻿using LibraryApp.UI.Models;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.Net.Http.Headers;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -23,16 +24,22 @@ namespace LibraryApp.UI.Controllers
            
             using (var httpclient = new HttpClient())
             {
-                httpclient.Timeout = TimeSpan.FromMinutes(10);
+                
                 var jsonEmployee = JsonConvert.SerializeObject(model);
                 StringContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
                 using (var response = await httpclient.PostAsync("https://localhost:4200/api/account/login",content))
                 {
+                 
+                 
                     if (response.IsSuccessStatusCode)
                     {
                         string jsonString = await response.Content.ReadAsStringAsync();
-                        HttpContext.Session.SetString("UserToken", jsonString);
+                        HttpContext.Session.SetString("Authorization", jsonString);
+                       
+                        var head = HttpContext.Request.Headers;
+                        //var token = HttpContext.Session.GetString("Authorization").ToString();
                         return Redirect("/");
+                   
                     }
                 }
             }
@@ -49,6 +56,7 @@ namespace LibraryApp.UI.Controllers
                 {
                     if (response.IsSuccessStatusCode)
                     {
+
                         string jsonString = await response.Content.ReadAsStringAsync();
                         HttpContext.Session.SetString("UserToken", jsonString);
                         return View();
@@ -64,15 +72,17 @@ namespace LibraryApp.UI.Controllers
         {
             using (var httpclient = new HttpClient())
             {
+                var token = HttpContext.Session.GetString("Authorization").ToString();
+                httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 using (var response = await httpclient.GetAsync("https://localhost:4200/api/account/logout"))
                 {
                     if (response.IsSuccessStatusCode)
                     {
-                        return View();
+                        return Redirect("/");
                     }
                 }
             }
-            return View();
+            return Redirect("/");
         }
     }
 }

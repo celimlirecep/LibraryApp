@@ -1,8 +1,12 @@
 ﻿
 
+using LibraryApp.API.Identity;
 using LibraryApp.API.Models;
 using LibraryApp.BL.Abstract;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
@@ -11,30 +15,44 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.API.Controllers
 {
-    [Authorize]
+    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
     [ApiController]
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
     {
-      
+
         private readonly IBookService _bookService;
-       
-        public BooksController(IBookService bookService)
+        private readonly IUserCardService _userCardService;
+        private UserManager<User> _userManager;
+
+        public BooksController(IBookService bookService, IUserCardService userCardService, UserManager<User> userManager)
         {
             _bookService = bookService;
-            
+            _userCardService = userCardService;
+            _userManager = userManager;
         }
+
         [HttpGet]
         public async Task<IActionResult> GetBooks()
         {
             var books = await _bookService.GetAll();
+            if (books == null)
+            {
+                return NotFound();
+            }
             return Ok(books);
         }
 
-        [HttpPost]
-        public async Task<IActionResult> BookReserve(BookReserveModel model)
+        [HttpPost("addbook")]
+        public async Task<IActionResult> AddToUserCard(BookAddModel model)
         {
-            _bookService.AddBookForUsers()
+            if (model.BookId<1)
+            {
+                return BadRequest();
+            }
+            string userId= HttpContext.Session.GetString("UserId").ToString();
+            await _userCardService.AddToCard(userId, model.BookId);
+            return Ok();
 
         }
 

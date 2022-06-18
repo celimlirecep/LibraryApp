@@ -11,7 +11,12 @@ namespace LİbraryApp.EL
         public int BookReserveId { get; set; }
         public DateTime BarrowingDate { get; set; }
         public DateTime DeliveryDate { get; set; }
-        public DateTime BookDeadline { get { return BarrowingDate.AddDays(7); }  }
+        private DateTime bookDeadline;
+        public DateTime BookDeadline
+        {
+            get { return bookDeadline; }
+            set { bookDeadline = BarrowingDate.AddDays(7); }
+        }
         public int BookId { get; set; }
         public Book Book { get; set; }
         public int UserCardId { get; set; }

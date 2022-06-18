@@ -26,7 +26,7 @@ namespace LibraryApp.UI
         {
             services.AddSession(option =>
             {
-                //Süre 1 saat olarak belirlendi
+               
                 option.IdleTimeout = TimeSpan.FromHours(1);
             });
             services.ConfigureApplicationCookie(options =>
