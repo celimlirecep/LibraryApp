@@ -24,12 +24,13 @@ namespace LibraryApp.BL.Concreate
             if (userCard != null)
             {
                 var index = userCard.BookReserves.FindIndex(i => i.BookId == bookId);
-                if (index<0)
+                if (index>0)
                 {
                     userCard.BookReserves.Add(new BookReserve() { 
                     BookId=bookId,
                     BarrowingDate=DateTime.Now,
-                    UserCardId=userCard.UserCardId
+                    UserCardId=userCard.UserCardId,
+                    BookDeadline=DateTime.Now.AddDays(7)
                     });
                     await _unitOfWork.SaveAsync();
                 }

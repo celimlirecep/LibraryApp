@@ -33,9 +33,12 @@ namespace LibraryApp.UI.Controllers
                  
                     if (response.IsSuccessStatusCode)
                     {
-                        string jsonString = await response.Content.ReadAsStringAsync();
-                        HttpContext.Session.SetString("Authorization", jsonString);
-                       
+                        var jsonString = await response.Content.ReadAsStringAsync();
+                      
+                        ResponseMessage values = JsonConvert.DeserializeObject<ResponseMessage>(jsonString);
+                        HttpContext.Session.SetString("Authorization", values.Token);
+                        HttpContext.Session.SetString("UserId", values.Token);
+
                         var head = HttpContext.Request.Headers;
                         //var token = HttpContext.Session.GetString("Authorization").ToString();
                         return Redirect("/");

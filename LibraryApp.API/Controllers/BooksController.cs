@@ -51,8 +51,8 @@ namespace LibraryApp.API.Controllers
             {
                 return BadRequest();
             }
-            string userId = _userManager.GetUserId(User);
-            await _userCardService.AddToCard(userId, model.BookId);
+     
+            await _userCardService.AddToCard(model.UserId, model.BookId);
             return Ok();
 
         }

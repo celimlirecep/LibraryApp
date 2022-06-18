@@ -54,7 +54,12 @@ namespace LibraryApp.API.Controllers
             {
             
                 var userToken = JWTAuthenticationManager.Authenticate(user.Id);
-                return Ok(userToken);
+                ResponseMessage responseMessage = new ResponseMessage()
+                {
+                    Token = userToken,
+                    UserId = user.Id
+                };
+                return Ok(responseMessage);
             }
             return NotFound();
         }

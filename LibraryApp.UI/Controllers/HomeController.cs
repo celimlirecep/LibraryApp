@@ -47,7 +47,13 @@ namespace LibraryApp.UI.Controllers
             {
                 var token = HttpContext.Session.GetString("Authorization").ToString();
                 httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-                var jsonEmployee = JsonConvert.SerializeObject(bookId);
+                var userId = HttpContext.Session.GetString("UserId").ToString();
+                AddBookModel model = new AddBookModel()
+                {
+                    BookId = bookId,
+                    UserId = userId
+                };
+                var jsonEmployee = JsonConvert.SerializeObject(model);
                 StringContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
                 httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
                 using (var response = await httpclient.PostAsync("https://localhost:4200/api/Books/addbook", content))
