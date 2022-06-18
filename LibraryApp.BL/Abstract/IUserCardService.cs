@@ -10,7 +10,7 @@ namespace LibraryApp.BL.Abstract
     public interface IUserCardService
     {
         public Task InitializeUserCard(string userId);
-         UserCard GetUserCardByUserId(string userId);
+        Task<UserCard> GetUserCardByUserId(string userId);
         Task AddToCard(string userId, int bookId);
     }
 }

@@ -37,7 +37,7 @@ namespace LibraryApp.UI.Controllers
                       
                         ResponseMessage values = JsonConvert.DeserializeObject<ResponseMessage>(jsonString);
                         HttpContext.Session.SetString("Authorization", values.Token);
-                        HttpContext.Session.SetString("UserId", values.Token);
+                        HttpContext.Session.SetString("UserId", values.UserId);
 
                         var head = HttpContext.Request.Headers;
                         //var token = HttpContext.Session.GetString("Authorization").ToString();
@@ -46,6 +46,10 @@ namespace LibraryApp.UI.Controllers
                     }
                 }
             }
+            return View();
+        }
+        public IActionResult Register()
+        {
             return View();
         }
         [HttpPost]

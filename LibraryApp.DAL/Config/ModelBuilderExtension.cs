@@ -18,7 +18,13 @@ namespace LibraryApp.DAL.Config
                 new Book() { BookId = 3, BookName = "Savaşçı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 5 },
                 new Book() { BookId = 4, BookName = "Doğmamış Çocuğa Mektup", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 3 },
                 new Book() { BookId = 5, BookName = "Küçük Kara Balık", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 10 },
-                new Book() { BookId = 6, BookName = "Uygarlıkların Batışı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 7 }
+                new Book() { BookId = 6, BookName = "Uygarlıkların Batışı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 7 },
+                new Book() { BookId = 7, BookName = "Uygarlıkların Batışı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 7 },
+                new Book() { BookId = 8, BookName = "Uygarlıkların Batışı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 7 },
+                new Book() { BookId = 9, BookName = "Uygarlıkların Batışı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 7 },
+                new Book() { BookId = 10, BookName = "Uygarlıkların Batışı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 7 },
+                new Book() { BookId = 11, BookName = "Uygarlıkların Batışı", BookImage = "https://i2.milimaj.com/i/milliyet/75/750x0/61778f6a932151bfc8037f8f.jpg", BookStock = 5, CurrentStock = 7 }
+
 
                 );
         }

@@ -26,6 +26,11 @@ namespace LibraryApp.UI.Controllers
         //allows the user to fetch all the books
         public async Task<IActionResult> GetAllBooksFromRestFullApi()
         {
+           
+            if (HttpContext.Session.GetString("Authorization") == null)
+            {
+                return Redirect("/");
+            }
             var books = new List<BookModel>();
             using (var httpclient = new HttpClient())
             {
@@ -39,7 +44,7 @@ namespace LibraryApp.UI.Controllers
             }
             return View(books);
         }
-        [HttpPost]
+         [HttpPost]
         public async Task<IActionResult> AddBookToUserLibrary(int bookId)
         {
             
@@ -55,8 +60,8 @@ namespace LibraryApp.UI.Controllers
                 };
                 var jsonEmployee = JsonConvert.SerializeObject(model);
                 StringContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
-                httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-                using (var response = await httpclient.PostAsync("https://localhost:4200/api/Books/addbook", content))
+                
+                using (var response = await httpclient.PostAsync("https://localhost:4200/api/Books/getusersbook", content))
                 {
                     if (response.IsSuccessStatusCode)
                     {
@@ -65,7 +70,30 @@ namespace LibraryApp.UI.Controllers
                 }
               
             }
-            return Redirect("/");
+            return RedirectToAction("GetAllBooksFromRestFullApi");
+        }
+       
+        public async Task<IActionResult> GetUserLibrary()
+        {
+            using (var httpclient = new HttpClient())
+            {
+                var token = HttpContext.Session.GetString("Authorization").ToString();
+                httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
+                var userId = HttpContext.Session.GetString("UserId").ToString();
+                var jsonEmployee = JsonConvert.SerializeObject(new {userId=userId });
+                StringContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
+
+                using (var response = await httpclient.PostAsync("https://localhost:4200/api/Books/getmylibrary", content))
+                {
+                    if (response.IsSuccessStatusCode)
+                    {
+                        
+                        return View();
+                    }
+                }
+
+            }
+            return RedirectToAction("GetAllBooksFromRestFullApi");
         }
 
 

@@ -9,6 +9,6 @@ namespace LibraryApp.DAL.Abstract
 {
     public interface IUserCardRepository : IRepository<UserCard>
     {
-        UserCard GetUserCardByUserId(string userId);
+        Task<UserCard> GetUserCardByUserId(string userId);
     }
 }

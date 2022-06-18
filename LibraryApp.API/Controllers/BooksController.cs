@@ -51,10 +51,20 @@ namespace LibraryApp.API.Controllers
             {
                 return BadRequest();
             }
-     
+            var tarih = DateTime.Now.AddDays(7);
             await _userCardService.AddToCard(model.UserId, model.BookId);
             return Ok();
 
+        }
+        [HttpPost("getmylibrary")]
+        public async Task<IActionResult> Getusersbook(string userId)
+        {
+            var books = await _bookService.GetBooksByUserId(userId);
+            if (books == null)
+            {
+                return NotFound();
+            }
+            return Ok(books);
         }
 
     }

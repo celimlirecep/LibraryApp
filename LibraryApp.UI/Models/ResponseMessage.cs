@@ -5,10 +5,10 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.UI.Models
 {
-    public class ResponseMessage
+    public  class ResponseMessage
     {
-        public string Token { get; set; }
-        public string UserId { get; set; }
+        public  string Token { get; set; }
+        public  string UserId { get; set; }
 
     }
 }

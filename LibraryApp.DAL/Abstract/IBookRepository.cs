@@ -9,5 +9,6 @@ namespace LibraryApp.DAL.Abstract
 {
     public interface IBookRepository : IRepository<Book>
     {
+        public Task<List<Book>> GetBooksByUserId(string userId);
     }
 }

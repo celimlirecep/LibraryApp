@@ -20,13 +20,13 @@ namespace LibraryApp.DAL.Concreate.EfCore
             get { return _context as LibraryContext; }
         }
 
-        public UserCard GetUserCardByUserId(string userId)
+        public async Task<UserCard> GetUserCardByUserId(string userId)
         {
-            return  libraryContext
+            return  await libraryContext
                 .UserCards
                 .Include(i => i.BookReserves)
                 .ThenInclude(i => i.Book)
-                .FirstOrDefault(i => i.UserId == userId);
+                .FirstOrDefaultAsync(i => i.UserId == userId);
         }
     }
 }

@@ -1,4 +1,5 @@
 using LibraryApp.API.Identity;
+using LibraryApp.API.JWT;
 using LibraryApp.BL.Abstract;
 using LibraryApp.BL.Concreate;
 using LibraryApp.DAL.Abstract;
@@ -34,7 +35,7 @@ namespace LibraryApp.API
 
         public IConfiguration Configuration { get; }
         readonly string MyPolicy = "_MyAllowAll";
-        private readonly string key = "we push the impossible to see the limits of possibility";
+        //private readonly string key = "we push the impossible to see the limits of possibility";
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
@@ -58,7 +59,7 @@ namespace LibraryApp.API
                 x.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuerSigningKey = true,
-                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
+                    IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(Configuration["JWTKey"])),
                     ValidateIssuer = false,
                     ValidateAudience = false,
                     ValidateLifetime=true,
@@ -73,6 +74,7 @@ namespace LibraryApp.API
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<IUserCardService, UserCardManager>();
             services.AddScoped<IBookService, BookManager>();
+            services.AddSingleton<IJWTAuthenticationService>(new JWTAuthenticationManager(Configuration["JWTKey"]));
             services.AddCors(
                options =>
                {

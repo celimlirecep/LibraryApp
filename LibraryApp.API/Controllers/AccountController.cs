@@ -22,18 +22,16 @@ namespace LibraryApp.API.Controllers
         private UserManager<User> _userManager;
         private SignInManager<User> _signInManager;
         private IUserCardService _userCardService;
-      
-    
+        private IJWTAuthenticationService _jWT;
 
-        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IUserCardService userCardService)
+        public AccountController(UserManager<User> userManager, SignInManager<User> signInManager, IUserCardService userCardService, IJWTAuthenticationService jWT)
         {
             _userManager = userManager;
             _signInManager = signInManager;
             _userCardService = userCardService;
-         
+            _jWT = jWT;
         }
 
-        
         [AllowAnonymous]
         [HttpPost("login")]
         //[ValidateAntiForgeryToken]
@@ -53,7 +51,7 @@ namespace LibraryApp.API.Controllers
             if (result.Succeeded)
             {
             
-                var userToken = JWTAuthenticationManager.Authenticate(user.Id);
+                var userToken = _jWT.Authenticate(user.Id);
                 ResponseMessage responseMessage = new ResponseMessage()
                 {
                     Token = userToken,
@@ -68,7 +66,7 @@ namespace LibraryApp.API.Controllers
         [HttpPost("register")]
         public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
-            if (ModelState.IsValid)
+            if (!ModelState.IsValid)
             {
                 return BadRequest();
             }

@@ -20,11 +20,14 @@ namespace LibraryApp.BL.Concreate
 
         public async Task AddToCard(string userId, int bookId)
         {
-            var userCard = GetUserCardByUserId(userId);
+            var userCard =await GetUserCardByUserId(userId);
             if (userCard != null)
             {
+                //added book will not be added again
                 var index = userCard.BookReserves.FindIndex(i => i.BookId == bookId);
-                if (index>0)
+                //Maximum of 3 books available.
+                var bookCount = userCard.BookReserves.Count();
+                if (index<0 && bookCount<3)
                 {
                     userCard.BookReserves.Add(new BookReserve() { 
                     BookId=bookId,
@@ -37,9 +40,9 @@ namespace LibraryApp.BL.Concreate
             }
         }
 
-        public  UserCard GetUserCardByUserId(string userId)
+        public async Task<UserCard> GetUserCardByUserId(string userId)
         {
-            return  _unitOfWork.UserCards.GetUserCardByUserId(userId);
+            return await _unitOfWork.UserCards.GetUserCardByUserId(userId);
         }
 
         public async Task InitializeUserCard(string userId)

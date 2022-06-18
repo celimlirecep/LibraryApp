@@ -11,12 +11,18 @@ using System.Text;
 
 namespace LibraryApp.API.JWT
 {
-    public static class JWTAuthenticationManager 
+    public  class JWTAuthenticationManager:IJWTAuthenticationService 
     {
-        public static string Authenticate(string userId)
+        private readonly string _tokenKey;
+
+        public JWTAuthenticationManager(string tokenKey)
+        {
+            _tokenKey = tokenKey;
+        }
+
+        public  string Authenticate(string userId)
         {
             var tokenHandler = new JwtSecurityTokenHandler();
-            var tokenKey = Encoding.ASCII.GetBytes("we push the impossible to see the limits of possibility");
             //token will be user specific
             //token management
             var tokenDescriptor = new SecurityTokenDescriptor
@@ -29,7 +35,7 @@ namespace LibraryApp.API.JWT
                 //open for 1 hour according to international time(for token)
                 Expires = DateTime.Now.AddHours(1),
                 SigningCredentials=new SigningCredentials(
-                    new SymmetricSecurityKey(tokenKey),SecurityAlgorithms.HmacSha256Signature)
+                    new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_tokenKey)),SecurityAlgorithms.HmacSha256Signature)
             };
             var token = tokenHandler.CreateToken(tokenDescriptor);
             return tokenHandler.WriteToken(token);
