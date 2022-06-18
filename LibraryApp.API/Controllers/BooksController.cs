@@ -15,7 +15,8 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.API.Controllers
 {
-    [Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    //[Authorize(AuthenticationSchemes = JwtBearerDefaults.AuthenticationScheme)]
+    [Authorize]
     [ApiController]
     [Route("api/[controller]")]
     public class BooksController : ControllerBase
@@ -50,7 +51,7 @@ namespace LibraryApp.API.Controllers
             {
                 return BadRequest();
             }
-            string userId= HttpContext.Session.GetString("UserId").ToString();
+            string userId = _userManager.GetUserId(User);
             await _userCardService.AddToCard(userId, model.BookId);
             return Ok();
 

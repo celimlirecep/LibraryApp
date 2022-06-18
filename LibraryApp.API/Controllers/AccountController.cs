@@ -39,6 +39,10 @@ namespace LibraryApp.API.Controllers
         //[ValidateAntiForgeryToken]
         public async Task<IActionResult> Login(LoginModel model)
         {
+            if (model==null)
+            {
+                throw new NullReferenceException("Register model is null");
+            }
             var user = await _userManager.FindByNameAsync(model.Username);
             if (user == null)
             {
@@ -54,12 +58,15 @@ namespace LibraryApp.API.Controllers
             }
             return NotFound();
         }
-
+        // /api/account/register
         [AllowAnonymous]
         [HttpPost("register")]
-        //[ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterModel model)
+        public async Task<IActionResult> Register([FromBody] RegisterModel model)
         {
+            if (ModelState.IsValid)
+            {
+                return BadRequest();
+            }
             var user = new User()
             {
                 FirstName = model.FirstName,

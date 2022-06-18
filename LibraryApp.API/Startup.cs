@@ -47,7 +47,7 @@ namespace LibraryApp.API
             {
                 configureOptions.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
                 configureOptions.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-                configureOptions.DefaultScheme = JwtBearerDefaults.AuthenticationScheme;
+                
                 
             }).AddJwtBearer(x => {
 
@@ -61,7 +61,8 @@ namespace LibraryApp.API
                     IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(key)),
                     ValidateIssuer = false,
                     ValidateAudience = false,
-                    ValidateLifetime=true
+                    ValidateLifetime=true,
+                    RequireExpirationTime=true
                 };
             });
 
