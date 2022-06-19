@@ -84,3 +84,4 @@ C:\Users\recep\OneDrive\Masaüstü\LibraryApp\LibraryApp.UI\obj\Debug\net5.0\Lib
 C:\Users\recep\OneDrive\Masaüstü\LibraryApp\LibraryApp.UI\obj\Debug\net5.0\LibraryApp.UI.genruntimeconfig.cache
 C:\Users\recep\OneDrive\Masaüstü\LibraryApp\LibraryApp.UI\obj\Debug\net5.0\Razor\Views\Account\Register.cshtml.g.cs
 C:\Users\recep\OneDrive\Masaüstü\LibraryApp\LibraryApp.UI\obj\Debug\net5.0\Razor\Views\Home\GetUserLibrary.cshtml.g.cs
+C:\Users\recep\OneDrive\Masaüstü\LibraryApp\LibraryApp.UI\obj\Debug\net5.0\Razor\Views\Home\ReadBooksHistory.cshtml.g.cs

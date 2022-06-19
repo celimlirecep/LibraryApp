@@ -1,0 +1,98 @@
+﻿@model List<ReadBookHistoryModel>
+
+
+@section Css {
+    <link href="https://cdn.datatables.net/1.12.1/css/dataTables.bootstrap5.min.css" rel="stylesheet" />
+}
+@section Scripts{
+    <script src="https://cdn.datatables.net/1.12.1/js/jquery.dataTables.min.js"></script>
+    <script src="https://cdn.datatables.net/1.12.1/js/dataTables.bootstrap5.min.js"></script>
+    <script>
+        $(document).ready(function () {
+            $('#headingList').DataTable(
+                {
+                    lengthMenu: [
+                        [2, 5, 10, 20, 40, -1],
+                        [2, 5, 10, 20, 40, "Tümü"]
+                    ],
+                    language: {
+                        url: "//cdn.datatables.net/plug-ins/1.12.1/i18n/tr.json"
+                    }
+                }
+            );
+        });
+    </script>
+}
+
+
+
+<!-- Main content -->
+<section class="content">
+
+    <!-- Default box -->
+    <div class="card">
+
+        <div class="card-body p-0">
+            <table data-page-length="5" class="table table-striped projects" id="headingList">
+                <thead>
+                    <tr>
+                        <th style="width: 10%">
+                            Book Image
+                        </th>
+                        <th style="width: 25%">
+                            Kitap Adı
+                        </th>
+                        <th style="width: 15%">
+                            Alış tarihi
+                        </th>
+                        <th style="width: 15%">
+                            Teslim Tarihi
+                        </th>
+
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var book in Model)
+                    {
+                        <tr>
+                            <td>
+                                <img src="@book.BookImage" alt="Alternate Text" width="40" />
+                            </td>
+                            <td>
+                              @book.BookName
+                              
+                               
+                               
+                            </td>
+                        
+
+                            <td class="list-inline">
+
+                                @book.BarrowingDate.ToString("dd MMM yyyy")
+
+
+                            </td>
+                            <td class="list-inline">
+
+                                @book.DelivertDate.ToString("dd MMM yyyy")
+
+
+                            </td>
+                          
+
+                         
+                        </tr>
+
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <!-- /.card-body -->
+    </div>
+    <!-- /.card -->
+
+</section>
+
+
+

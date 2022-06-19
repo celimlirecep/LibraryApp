@@ -1,7 +1,7 @@
-﻿@model List<BookModel>
+﻿@model List<LibraryBookModel>
 
 <div class="text-center">
-    <h4 class="display-4">Bütün Kitapların Listesi</h4>
+    <h4 class="display-4">Benim Kütüphem</h4>
 </div>
 
 <div class="row">
@@ -18,13 +18,14 @@
                         <p class="card-text">Kitap hakkında kısmı eklenicek</p>
                     </div>
                     <ul class="list-group list-group-flush">
-                        <li class="list-group-item">Güncel Stok adedi:@item.CurrentStock</li>
+                        <li class="list-group-item">Kitap alım zamanı:  @item.BarrowingDate</li>
+                        <li class="list-group-item">Kitap son teslim zamanı:  @item.BookDeadline</li>
 
                     </ul>
                     <div class="card-body">
-                        <form asp-controller="Home" asp-action="AddBookToUserLibrary" method="post">
+                        <form asp-controller="Home" asp-action="DeleteBookFromUserLibrary">
                             <input type="hidden" name="bookId" value="@item.BookId" />
-                            <input type="submit" class="btn btn-primary" value="Ekle" />
+                            <input type="submit" class="btn btn-primary" value="İade Et" />
                         </form>
 
 

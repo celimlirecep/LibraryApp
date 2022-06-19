@@ -10,6 +10,6 @@ namespace LibraryApp.BL.Abstract
     public interface IBookService
     {
         Task<List<Book>> GetAll();
-        Task<List<Book>> GetBooksByUserId(string userId);
+       
     }
 }

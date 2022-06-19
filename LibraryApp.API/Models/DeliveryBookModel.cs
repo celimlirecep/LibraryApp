@@ -6,12 +6,11 @@ using System.Threading.Tasks;
 
 namespace LibraryApp.API.Models
 {
-    public class UserTokenModel
+    public class DeliveryBookModel
     {
         [Required]
-        public string username { get; set; }
+        public int BookId { get; set; }
         [Required]
-        public string userId { get; set; }
-
+        public string UserId { get; set; }
     }
 }

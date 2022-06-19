@@ -15,6 +15,7 @@ namespace LİbraryApp.EL
         public int BookId { get; set; }
         public Book Book { get; set; }
         public int UserCardId { get; set; }
+        public bool Status { get; set; }
         public UserCard UserCard { get; set; }
 
 

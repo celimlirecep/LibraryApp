@@ -1,8 +1,10 @@
 ﻿
 
+using LibraryApp.API.DTO;
 using LibraryApp.API.Identity;
 using LibraryApp.API.Models;
 using LibraryApp.BL.Abstract;
+using LİbraryApp.EL;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
@@ -41,7 +43,8 @@ namespace LibraryApp.API.Controllers
             {
                 return NotFound();
             }
-            return Ok(books);
+            var bookDTOList=DTOBookModel(books);
+            return Ok(bookDTOList);
         }
 
         [HttpPost("addbook")]
@@ -51,20 +54,104 @@ namespace LibraryApp.API.Controllers
             {
                 return BadRequest();
             }
-            var tarih = DateTime.Now.AddDays(7);
-            await _userCardService.AddToCard(model.UserId, model.BookId);
-            return Ok();
+           
+            string result= await _userCardService.AddToCard(model.UserId, model.BookId);
+            return Ok(result);
 
         }
         [HttpPost("getmylibrary")]
-        public async Task<IActionResult> Getusersbook(string userId)
+        public async Task<IActionResult> GetUsersbook(UserInfo model)
         {
-            var books = await _bookService.GetBooksByUserId(userId);
-            if (books == null)
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+            UserCard userCard=   await _userCardService.GetUserCardByUserId(model.UserId);
+            if (userCard==null)
             {
                 return NotFound();
             }
-            return Ok(books);
+            List<UserLibraryModel> libraryModels = new List<UserLibraryModel>();
+            foreach (var bookReserve in userCard.BookReserves)
+            {
+                if (bookReserve.Status)
+                {
+                    continue;
+                }
+                var librarymodel = new UserLibraryModel()
+                {
+                    BookId=bookReserve.BookId,
+                    BarrowingDate=bookReserve.BarrowingDate,
+                    BookDeadline=bookReserve.BookDeadline,
+                    BookImage=bookReserve.Book.BookImage,
+                    BookName=bookReserve.Book.BookName,
+                };
+                libraryModels.Add(librarymodel);
+            }
+          
+          
+            return Ok(libraryModels);
+        }
+        [HttpPut("deliverybook")]
+        public async Task<IActionResult> DeliveryBook(DeliveryBookModel model)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+        
+            await _userCardService.DeleteToCard(model.UserId, model.BookId);
+            return Ok();
+        }
+        [HttpPost("readbookshistory")]
+        public async Task<IActionResult> ReadBooksHistory(UserInfo userInfo)
+        {
+            if (!ModelState.IsValid)
+            {
+                return BadRequest();
+            }
+         var userCard=   await _userCardService.GetUserCardByUserId(userInfo.UserId);
+            if (userCard==null)
+            {
+                return NotFound();
+            }
+            List<ReadBookHistoryModel> model = new List<ReadBookHistoryModel>();
+            foreach (var bookReserve in userCard.BookReserves)
+            {
+                if (bookReserve.Status)
+                {
+                    ReadBookHistoryModel readBook = new ReadBookHistoryModel()
+                    {
+                        BookId = bookReserve.BookId,
+                        BarrowingDate = bookReserve.BarrowingDate,
+                        BookImage = bookReserve.Book.BookImage,
+                        BookName = bookReserve.Book.BookName,
+                        DelivertDate = bookReserve.DeliveryDate
+                    };
+                    model.Add(readBook);
+                }
+            }
+
+
+            return Ok(model);
+
+        }
+
+        private List<BookModel> DTOBookModel(List<Book> books)
+        {
+            List<BookModel> bookModels = new List<BookModel>();
+            foreach (var book in books)
+            {
+                var bookmodel = new BookModel()
+                {
+                    BookId = book.BookId,
+                    BookImage=book.BookImage,
+                    BookName=book.BookName,
+                    CurrentStock=book.CurrentStock
+                };
+                bookModels.Add(bookmodel);
+            }
+            return bookModels;
         }
 
     }

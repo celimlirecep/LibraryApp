@@ -11,6 +11,8 @@ namespace LibraryApp.BL.Abstract
     {
         public Task InitializeUserCard(string userId);
         Task<UserCard> GetUserCardByUserId(string userId);
-        Task AddToCard(string userId, int bookId);
+        Task<string> AddToCard(string userId, int bookId);
+        Task DeleteToCard(string userId, int bookId);
+        
     }
 }

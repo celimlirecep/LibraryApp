@@ -2,12 +2,32 @@
 
 
 <div class="row">
-    <div class="col-md-4">
-        <h1 class="display-4">Tüm Kitapları Göster</h1>
+    <div class="col-md-8">
+        <h3 class="display-4">Tüm Kitapları Göster</h3>
     </div>
     <div class="col-md-4">
-        <form asp-action="GetAllBooksFromRestFullApi" method="post">
+        <form asp-action="GetAllBooksFromRestFullApi" >
             <input type="submit"  value="Getir" />
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <h3 class="display-4">Kütüphaneme Git</h3>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="GetUserLibrary" >
+            <input type="submit" value="Getir" />
+        </form>
+    </div>
+</div>
+<div class="row">
+    <div class="col-md-8">
+        <h3 class="display-4">Şimdiye Kadar Okuduklarım</h3>
+    </div>
+    <div class="col-md-4">
+        <form asp-action="ReadBooksHistory" >
+            <input type="submit" value="Getir" />
         </form>
     </div>
 </div>

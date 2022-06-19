@@ -10,5 +10,7 @@ namespace LibraryApp.DAL.Abstract
     public interface IUserCardRepository : IRepository<UserCard>
     {
         Task<UserCard> GetUserCardByUserId(string userId);
+        Task DeleteToUserCard(string userId, int bookId);
+       
     }
 }

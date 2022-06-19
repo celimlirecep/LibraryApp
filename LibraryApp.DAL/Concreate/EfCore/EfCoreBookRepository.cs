@@ -20,27 +20,16 @@ namespace LibraryApp.DAL.Concreate.EfCore
             get { return _context as LibraryContext; }
         }
 
-        public async Task<List<Book>> GetBooksByUserId(string userId)
+        public async Task IncreaseBookCurrentStock(int bookId)
         {
-           UserCard userCard= await libraryContext
-                  .UserCards
-                  .Where(i=>i.UserId==userId)
-                  .Include(i => i.BookReserves)
-                  .ThenInclude(i => i.Book)
-                  .FirstOrDefaultAsync();
-            List<Book> books = new List<Book>();
-            foreach (var bookreserve in userCard.BookReserves)
-            {
-                Book book = new Book()
-                {
-                    BookId = bookreserve.BookId,
-                    BookImage=bookreserve.Book.BookImage,
-                    BookName=bookreserve.Book.BookName,
-                    CurrentStock=bookreserve.Book.CurrentStock
-                };
-                books.Add(book);
-            }
-            return books;
+            var book = await libraryContext.Books.FindAsync(bookId);
+            book.CurrentStock += 1;
+        }
+
+        public async Task ReduceBookCurrentStock(int bookId)
+        {
+            var book = await libraryContext.Books.FindAsync(bookId);
+            book.CurrentStock -= 1;
         }
     }
 }

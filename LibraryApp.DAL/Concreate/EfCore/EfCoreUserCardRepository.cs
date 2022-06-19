@@ -20,7 +20,23 @@ namespace LibraryApp.DAL.Concreate.EfCore
             get { return _context as LibraryContext; }
         }
 
-        public async Task<UserCard> GetUserCardByUserId(string userId)
+        public async Task DeleteToUserCard(string userId, int bookId)
+        {
+           
+            
+            UserCard userCard = await libraryContext.UserCards.FirstOrDefaultAsync(i => i.UserId == userId);
+            BookReserve bookReserve= await libraryContext.BookReserves.FirstOrDefaultAsync(i => i.UserCardId == userCard.UserCardId && i.BookId == bookId);
+            bookReserve.Status = true;
+            bookReserve.DeliveryDate = DateTime.Now;
+          
+           
+           
+        
+            
+       
+        }
+
+        public async Task<UserCard> GetUserCardByUserId(string userId) 
         {
             return  await libraryContext
                 .UserCards

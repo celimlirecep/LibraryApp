@@ -75,20 +75,9 @@ namespace LibraryApp.UI.Controllers
         }
 
       
-        public async Task<IActionResult> LogOut()
+        public  IActionResult LogOut()
         {
-            using (var httpclient = new HttpClient())
-            {
-                var token = HttpContext.Session.GetString("Authorization").ToString();
-                httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-                using (var response = await httpclient.GetAsync("https://localhost:4200/api/account/logout"))
-                {
-                    if (response.IsSuccessStatusCode)
-                    {
-                        return Redirect("/");
-                    }
-                }
-            }
+            HttpContext.Session.SetString("Authorization", string.Empty);
             return Redirect("/");
         }
     }

@@ -22,9 +22,6 @@ namespace LibraryApp.BL.Concreate
             return await _unitOfWork.Books.GetAll();
         }
 
-        public async Task<List<Book>> GetBooksByUserId(string userId)
-        {
-            return await _unitOfWork.Books.GetBooksByUserId( userId);
-        }
+        
     }
 }
