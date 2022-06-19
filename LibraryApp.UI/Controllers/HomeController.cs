@@ -25,9 +25,9 @@ namespace LibraryApp.UI.Controllers
         public async Task<IActionResult> GetAllBooksFromRestFullApi()
         {
            
-            if (HttpContext.Session.GetString("Authorization") == null || HttpContext.Session.GetString("Authorization") == string.Empty)
+            if (!IsAuthentic())
             {
-                //giriş yapın
+                TempData["Message"] = CreateMessage("Dikkat", "Lütfen Sisteme Giriş Yapınız", "warning");
                 return Redirect("/");
             }
             var books = new List<BookModel>();
@@ -48,29 +48,29 @@ namespace LibraryApp.UI.Controllers
         {
             if (bookId<1)
             {
-                //kitap seçiniz 
+                TempData["Message"] = CreateMessage("Dikkat", "Lütfen eklemek istediğiniz kitabı seçiniz", "warning");
                 return RedirectToAction("GetAllBooksFromRestFullApi");
             }
             
             using (var httpclient = new HttpClient())
             {
-                var token = HttpContext.Session.GetString("Authorization").ToString();
-                httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + token);
-                var userId = HttpContext.Session.GetString("UserId").ToString();
+                ResponseMessage message = GetCurrentUserInfo();
+                httpclient.DefaultRequestHeaders.Add("Authorization", "Bearer " + message.Token);
+             
                 AddBookModel model = new AddBookModel()
                 {
                     BookId = bookId,
-                    UserId = userId
+                    UserId = message.UserId
                 };
                 var jsonEmployee = JsonConvert.SerializeObject(model);
                 StringContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
                 
                 using (var response = await httpclient.PostAsync("https://localhost:4200/api/Books/addbook", content))
                 {
-                    if (response.IsSuccessStatusCode)
-                    {
-                        //eklendi mesajı verilecek
-                    }
+                    string jsonString = await response.Content.ReadAsStringAsync();
+                    
+                    TempData["Message"] = CreateMessage("Dikkat", $"{jsonString}", "warning");
+                    
                 }
               
             }
@@ -78,8 +78,9 @@ namespace LibraryApp.UI.Controllers
         }
         public async Task<IActionResult> GetUserLibrary()
         {
-            if (HttpContext.Session.GetString("Authorization") == null || HttpContext.Session.GetString("Authorization") == string.Empty)
+            if (!IsAuthentic())
             {
+                TempData["Message"] = CreateMessage("Dikkat", $"Lütfen Sisteme giriş yapınız", "warning");
                 return Redirect("/");
             }
             using (var httpclient = new HttpClient())
@@ -104,8 +105,9 @@ namespace LibraryApp.UI.Controllers
         }
         public async Task<IActionResult> ReadBooksHistory()
         {
-            if (HttpContext.Session.GetString("Authorization") == null || HttpContext.Session.GetString("Authorization") == string.Empty)
+            if (!IsAuthentic())
             {
+                TempData["Message"] = CreateMessage("Dikkat", $"Lütfen Sisteme giriş yapınız", "warning");
                 return Redirect("/");
             }
             using (var httpclient = new HttpClient())
@@ -120,7 +122,6 @@ namespace LibraryApp.UI.Controllers
                     {
                         var UserReadBooks = new List<ReadBookHistoryModel>();
                         string contentResponse = await response.Content.ReadAsStringAsync();
-                        //telim tarihide yazıcak
                         UserReadBooks = JsonConvert.DeserializeObject<List<ReadBookHistoryModel>>(contentResponse).ToList();
                         return View(UserReadBooks);
                     }
@@ -134,7 +135,7 @@ namespace LibraryApp.UI.Controllers
         {
             if (bookId<1)
             {
-                //bir kitap seçiniz yazısı gelicek
+                TempData["Message"] = CreateMessage("Dikkat", $"Lütfen teslim etmek istediğiniz kitabı seçiniz", "warning");
                 return RedirectToAction("GetUserLibrary");
             }
             using (var httpclient = new HttpClient())
@@ -154,11 +155,16 @@ namespace LibraryApp.UI.Controllers
                 {
                     if (response.IsSuccessStatusCode)
                     {
-                        //eklendi mesajı verilecek
+                        TempData["Message"] = CreateMessage("Dikkat", $"Kitap teslim etme işleminiz başarıyla gerçekleşmiştir", "success");
+                    }
+                    else
+                    {
+                        TempData["Message"] = CreateMessage("Dikkat", $"Kitap teslim etme işleminiz başarısız olmuştur, Lütfen yetkililerle ilitişime geçiniz", "success");
                     }
                 }
 
             }
+
             return RedirectToAction("GetUserLibrary");
 
         }
@@ -171,6 +177,24 @@ namespace LibraryApp.UI.Controllers
                 UserId =  HttpContext.Session.GetString("UserId").ToString()
             };
             
+        }
+        private static string CreateMessage(string title, string message, string alertType)
+        {
+            var msg = new AlertMessage()
+            {
+                Title = title,
+                Message = message,
+                AlertType = alertType
+            };
+            return JsonConvert.SerializeObject(msg);
+        }
+        private bool IsAuthentic()
+        {
+            if (HttpContext.Session.GetString("Authorization") == null || HttpContext.Session.GetString("Authorization") == string.Empty)
+            {
+                return false;
+            }
+            return true;
         }
 
 

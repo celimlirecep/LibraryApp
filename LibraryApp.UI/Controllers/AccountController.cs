@@ -21,32 +21,30 @@ namespace LibraryApp.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Login(LoginModel model)
         {
-           
+            if (!ModelState.IsValid)
+            {
+                TempData["Message"] = CreateMessage("Başarısız", "Lütfen geçerli bir e-posta adresi veya şifre girişi yapınız", "danger");
+                return View(model);
+            }
             using (var httpclient = new HttpClient())
             {
-                
                 var jsonEmployee = JsonConvert.SerializeObject(model);
                 StringContent content = new StringContent(jsonEmployee, Encoding.UTF8, "application/json");
                 using (var response = await httpclient.PostAsync("https://localhost:4200/api/account/login",content))
                 {
-                 
-                 
                     if (response.IsSuccessStatusCode)
                     {
                         var jsonString = await response.Content.ReadAsStringAsync();
-                      
                         ResponseMessage values = JsonConvert.DeserializeObject<ResponseMessage>(jsonString);
                         HttpContext.Session.SetString("Authorization", values.Token);
                         HttpContext.Session.SetString("UserId", values.UserId);
-
-                        var head = HttpContext.Request.Headers;
-                        //var token = HttpContext.Session.GetString("Authorization").ToString();
+                        TempData["Message"] = CreateMessage("Başarılı", "Giriş işlemi başarılı bir şekilde gerçekleşmiştir", "success");
                         return Redirect("/");
-                   
                     }
                 }
             }
-            return View();
+            TempData["Message"] = CreateMessage("Başarısız", "Giriş işlemi başarısız olmuştur", "danger");
+            return View(model);
         }
         public IActionResult Register()
         {
@@ -55,6 +53,11 @@ namespace LibraryApp.UI.Controllers
         [HttpPost]
         public async Task<IActionResult> Register(RegisterModel model)
         {
+            if (!ModelState.IsValid)
+            {
+                TempData["Message"] = CreateMessage("Başarısız", "Lütfen tüm alanları doğru bir şekilde doldurunuz", "danger");
+                return View(model);
+            }
             using (var httpclient = new HttpClient())
             {
                 var jsonEmployee = JsonConvert.SerializeObject(model);
@@ -66,7 +69,7 @@ namespace LibraryApp.UI.Controllers
 
                         string jsonString = await response.Content.ReadAsStringAsync();
                         HttpContext.Session.SetString("UserToken", jsonString);
-                        return View();
+                        return Redirect("/");
                     }
                 }
             }
@@ -79,6 +82,16 @@ namespace LibraryApp.UI.Controllers
         {
             HttpContext.Session.SetString("Authorization", string.Empty);
             return Redirect("/");
+        }
+        private static string CreateMessage(string title, string message, string alertType)
+        {
+            var msg = new AlertMessage()
+            {
+                Title = title,
+                Message = message,
+                AlertType = alertType
+            };
+            return JsonConvert.SerializeObject(msg);
         }
     }
 }

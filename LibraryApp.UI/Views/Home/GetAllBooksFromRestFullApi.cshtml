@@ -2,6 +2,7 @@
 
     <div class="text-center">
         <h4 class="display-4">Bütün Kitapların Listesi</h4>
+        <hr />
     </div>
 
 <div class="row">
@@ -10,7 +11,7 @@
         {
             @foreach (var item in Model)
             {
-    <div class="col-md-3">
+    <div class="col-md-4 my-4">
         <div class="card" style="width: 18rem;">
             <img src="@item.BookImage" class="card-img-top" alt="...">
             <div class="card-body">

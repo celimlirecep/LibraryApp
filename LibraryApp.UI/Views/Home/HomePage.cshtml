@@ -1,33 +1,41 @@
 ﻿
 
+<div class="row">
+    <div class="col-md-4 col-12 ">
+        <div class="card text-center bg-primary text-white" style="width: 18rem;height:200px;">
+            <div class="card-body">
+                <h5 class="card-title">Kitaplık</h5>
+                <p class="card-text">Kütüphanemizdeki tüm kitaplıkları stok adetleriyle birlikte görmek için tıklayınız.</p>
+                <form asp-action="GetAllBooksFromRestFullApi">
+                    <input type="submit" class="btn btn-outline-danger btn-lg" value="Git" />
+                </form>
+            </div>
+        </div>
 
-<div class="row">
-    <div class="col-md-8">
-        <h3 class="display-4">Tüm Kitapları Göster</h3>
     </div>
-    <div class="col-md-4">
-        <form asp-action="GetAllBooksFromRestFullApi" >
-            <input type="submit"  value="Getir" />
-        </form>
+    <div class="col-md-4 col-12 ">
+        <div class="card text-center bg-warning " style="width: 18rem;height:200px;">
+            <div class="card-body">
+                <h5 class="card-title">Senin Kütüphanen</h5>
+                <p class="card-text">Güncel okumakta olduğunu kitap sayfalarına bu sayfadan erişim sağlayabilirsiniz.</p>
+                <form asp-action="GetUserLibrary">
+                    <input type="submit" class="btn btn-outline-danger btn-lg" value="Git" />
+                </form>
+            </div>
+        </div>
     </div>
-</div>
-<div class="row">
-    <div class="col-md-8">
-        <h3 class="display-4">Kütüphaneme Git</h3>
-    </div>
-    <div class="col-md-4">
-        <form asp-action="GetUserLibrary" >
-            <input type="submit" value="Getir" />
-        </form>
-    </div>
-</div>
-<div class="row">
-    <div class="col-md-8">
-        <h3 class="display-4">Şimdiye Kadar Okuduklarım</h3>
-    </div>
-    <div class="col-md-4">
-        <form asp-action="ReadBooksHistory" >
-            <input type="submit" value="Getir" />
-        </form>
+    <div class="col-md-4 col-12 ">
+        <div class="card text-center bg-success text-white" style="width: 18rem;height:200px">
+            <div class="card-body">
+                <h5 class="card-title">Kendimi Ne Kadar Geliştirdim</h5>
+                <p class="card-text">Geçmişte okuğunuz tüm kitap bilgilerine buradan erişebilirsiniz.</p>
+                <form asp-action="ReadBooksHistory">
+                    <input type="submit" class="btn btn-outline-danger btn-lg" value="Git" />
+                </form>
+            </div>
+        </div>
     </div>
 </div>
+
+
+

@@ -25,6 +25,10 @@ namespace LibraryApp.BL.Concreate
             {
                 //added book will not be added again
                 var index = userCard.BookReserves.FindIndex(i => i.BookId == bookId);
+                if (index>0)
+                {
+                    return "Bu kitabı daha önce okudunuz";
+                }
                 //Maximum of 3 books available.
                 int activeBookCount = 0;
                 foreach (var item in userCard.BookReserves)
@@ -34,9 +38,10 @@ namespace LibraryApp.BL.Concreate
                         activeBookCount++;
                     }
                 }
-
-                if (index<0 && activeBookCount < 3)
+                if (activeBookCount>2)
                 {
+                    return "Aynı anda 3 kitap alımı yapamassınız";
+                }
                     userCard.BookReserves.Add(new BookReserve() { 
                     BookId=bookId,
                     BarrowingDate=DateTime.Now,
@@ -46,10 +51,12 @@ namespace LibraryApp.BL.Concreate
                     });
                     await _unitOfWork.Books.ReduceBookCurrentStock(bookId);
                     await _unitOfWork.SaveAsync();
-                    return "Registration Successful";
-                }
+                    return "Kitap başarıyla kütüphanenize eklenmiştir. Kütüphanenizi kontrol ediniz";
+                
             }
-            return "you have read before";
+            return "Kullanıcı bilgilerini kontrol edip tekrar deneyiniz";
+
+
         }
 
         public async Task DeleteToCard(string userId, int bookId)
